@@ -263,6 +263,14 @@ body{
 .searchbox::before{
   content:"🔍";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.55
 }
+/* ---------- 筛选胶囊 ---------- */
+.modes{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}
+.modes button{
+  border:1px solid var(--line2);background:#fffdf8;color:var(--ink2);border-radius:99px;
+  padding:6px 13px;font-family:inherit;font-size:13.5px;cursor:pointer
+}
+.modes button.on{background:var(--zhu);border-color:var(--zhu);color:#fff;font-weight:700}
+
 .hidden{display:none !important}
 @media (max-width:400px){
   .stat b{font-size:19px}
