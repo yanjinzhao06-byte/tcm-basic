@@ -2,7 +2,7 @@
  *  sw.js — 离线缓存（加到主屏幕后断网也能背）
  *  ⚠ 每次改完内容，把 VERSION +1，否则手机上一直是旧版
  * ============================================================ */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'tcm-' + VERSION;
 
 const ASSETS = [
@@ -10,11 +10,13 @@ const ASSETS = [
   './index.html',
   './terms.html',
   './write.html',
+  './quiz.html',
   './plan.html',
   './styles.css',
   './app.js',
   './data/data-terms.js',
   './data/data-mingjie.js',
+  './data/data-quiz.js',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
