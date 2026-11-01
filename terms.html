@@ -17,8 +17,9 @@
 <div class="top">
   <div class="top-in">
     <a class="tbtn" href="index.html">‹ 首页</a>
-    <h1 id="ttl">最小可懂集 · 100 词<small id="sub">先过这一关，再进正文</small></h1>
+    <h1 id="ttl">最小可懂集 · 140 词<small id="sub">必过 100 + 补充 40</small></h1>
     <button class="tbtn" id="btnOpenAll">全部展开</button>
+    <a class="tbtn" href="quiz.html">题库</a>
   </div>
 </div>
 
@@ -44,6 +45,12 @@
     <input id="q" type="search" placeholder="搜词或搜内容，如：气化 / 脾 / 水肿" autocomplete="off">
   </div>
 
+  <div class="modes" id="tiers">
+    <button data-t="all" class="on">全部 140</button>
+    <button data-t="base">必过 100</button>
+    <button data-t="extra">补充 40</button>
+  </div>
+
   <div id="body"></div>
 
   <div class="foot">
@@ -62,6 +69,8 @@
   var L = T.learned();
   var hideDone = false;
   var q = '';
+  var tier = 'all';
+  var EXTRA_GROUPS = ['g7', 'g8', 'g9'];
 
   function render(){
     var body = document.getElementById('body');
@@ -69,6 +78,10 @@
     var shown = 0, total = 0;
 
     TERMS_DATA.groups.forEach(function(g){
+      if (tier !== 'all') {
+        var isExtra = EXTRA_GROUPS.indexOf(g.id) >= 0;
+        if ((tier === 'extra') !== isExtra) return;
+      }
       var gWrap = document.createElement('div');
       gWrap.className = 'grp';
       gWrap.id = g.id;
@@ -86,6 +99,12 @@
       var done = g.terms.filter(function(t){ return L[t.w]; }).length;
       h.innerHTML = T.esc(g.title) + '<span class="cnt">' + done + '/' + g.terms.length + '</span>';
       gWrap.appendChild(h);
+      if (g.mod) {
+        var mp = document.createElement('div');
+        mp.style.cssText = 'font-size:12px;color:#8d8478;margin:-2px 0 7px';
+        mp.textContent = '📖 课本位置：' + g.mod;
+        gWrap.appendChild(mp);
+      }
 
       var p = document.createElement('p');
       p.textContent = g.sub;
@@ -159,6 +178,15 @@
   }
 
   /* 事件 */
+  document.getElementById('tiers').onclick = function(e){
+    var b = e.target.closest('button');
+    if (!b) return;
+    var bs = this.querySelectorAll('button');
+    for (var k = 0; k < bs.length; k++) bs[k].classList.remove('on');
+    b.classList.add('on');
+    tier = b.dataset.t;
+    render();
+  };
   document.getElementById('q').oninput = function(){
     q = this.value.trim().toLowerCase();
     render();
