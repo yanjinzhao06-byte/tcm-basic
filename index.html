@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#faf6ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="中医基础">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>中医基础理论 · 0 基础备考</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <h1>中医基础理论<small>河南专升本 · 0 基础备考站</small></h1>
+    <button class="tbtn" id="btnSpkAll">🔊 听今日</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="stat-row">
+    <div class="stat"><b><span data-prog="done">0</span></b><span>已掌握词 / <span data-prog="total">100</span></span></div>
+    <div class="stat"><b id="stStreak">0</b><span>连续打卡（天）</span></div>
+    <div class="stat"><b data-prog="pct">0%</b><span>最小可懂集进度</span></div>
+  </div>
+  <div class="bar"><i data-prog="bar"></i></div>
+
+  <!-- ================= 今日 ================= -->
+  <div class="today">
+    <div class="day" id="todayDay">今天 · 第一天</div>
+    <ol class="steps" id="todaySteps"></ol>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn primary" id="goLearn" href="terms.html" style="text-decoration:none">开始今天 ›</a>
+      <button class="btn" id="btnCheckin">打个卡</button>
+    </div>
+    <div class="note" style="margin-bottom:0">
+      <b>规则：</b>每天只做三件事——学 5 个新词、默写 1 条名解、看一眼昨天的。不要贪多，<b>连续 100 天</b>比一天背 50 个有用。
+    </div>
+  </div>
+
+  <!-- ================= 入口 ================= -->
+  <div class="entries">
+    <a class="entry hot" href="terms.html">
+      <div class="ico">字</div>
+      <div class="txt"><strong>最小可懂集 · 100 词</strong><span>0 基础第一关。先学这 100 个词，后面才看得懂</span></div>
+      <div class="arrow">›</div>
+    </a>
+    <a class="entry hot" href="write.html">
+      <div class="ico">写</div>
+      <div class="txt"><strong>必背名解 · 默写台</strong><span>看 → 抄 → 默。主观题 60 分就靠这个</span></div>
+      <div class="arrow">›</div>
+    </a>
+    <a class="entry" href="plan.html">
+      <div class="ico">路</div>
+      <div class="txt"><strong>16 周路线 + 三条禁令</strong><span>别按教材从绪论死读，这里告诉你先学什么</span></div>
+      <div class="arrow">›</div>
+    </a>
+  </div>
+
+  <!-- ================= 分组进度 ================= -->
+  <div class="hd" style="padding-top:18px"><h2 style="font-size:18px">六大组进度</h2></div>
+  <div class="entries" id="grpList"></div>
+
+  <div class="hd"><h2 style="font-size:18px">三条禁令</h2></div>
+  <div class="note">
+    <ol class="bad-list">
+      <li><b>不许刷题。</b>0 基础刷题就是在背答案，换个数就错。先听懂，再刷。</li>
+      <li><b>不许平均用力。</b>藏象 + 病机要占一半以上时间，绪论和体质可以粗过。</li>
+      <li><b>不许"看懂就算学会"。</b>唯一标准是：遮住原文能不能默出来。</li>
+    </ol>
+  </div>
+
+  <div class="foot">
+    中医基础理论 · 0 基础备考站<br>
+    内容以陈建章·王敏勇《中医基础理论》第三版为校对本 · 表述以你书上原话为准<br>
+    <span id="verLine"></span>
+  </div>
+</div>
+
+<script src="data/data-terms.js"></script>
+<script src="data/data-mingjie.js"></script>
+<script src="app.js"></script>
+<script>
+(function(){
+  var T = window.TCM;
+  T.checkin();
+  T.renderProgress();
+
+  var p = T.progress();
+  var s = T.streak();
+  document.getElementById('stStreak').textContent = s.n || 0;
+  document.getElementById('todayDay').textContent =
+    '今天 · 已连续 ' + (s.n || 1) + ' 天' + (p.done >= p.total ? ' · 100 词已全过 🎉' : '');
+
+  /* 今日任务：5 个新词 + 1 条名解 + 复习 */
+  var L = T.learned();
+  var fresh = [];
+  TERMS_DATA.groups.forEach(function(g){
+    g.terms.forEach(function(t){ if(!L[t.w] && fresh.length < 5) fresh.push(t); });
+  });
+  var mjs = T.mjStat();
+  var mj = (MINGJIE_DATA.items.filter(function(x){ return !mjs[x.id]; })[0]) || MINGJIE_DATA.items[0];
+
+  var steps = [
+    { n:1, t: '旧词回看：随便翻 5 张已掌握的', m: '约 3 分钟', href: 'terms.html' },
+    { n:2, t: fresh.length
+        ? '新词 5 个：' + fresh.map(function(x){return x.w;}).join('、')
+        : '新词已全部学完，今天只做默写', m: fresh.length ? '约 15 分钟' : '—', href: 'terms.html' },
+    { n:3, t: '默写 1 条：' + mj.q, m: '约 5 分钟', href: 'write.html?id=' + mj.id }
+  ];
+  var ol = document.getElementById('todaySteps');
+  steps.forEach(function(x){
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="n">' + x.n + '</span><span class="t">' + T.esc(x.t) +
+                   '</span><span class="m">' + x.m + '</span>';
+    li.style.cursor = 'pointer';
+    li.onclick = function(){ location.href = x.href; };
+    ol.appendChild(li);
+  });
+
+  document.getElementById('goLearn').href = fresh.length ? 'terms.html' : 'write.html';
+
+  /* 打卡 */
+  document.getElementById('btnCheckin').onclick = function(){
+    var st = T.streak();
+    this.textContent = '已打卡 · 连续 ' + (st.n || 1) + ' 天 ✅';
+    this.style.color = '#2f7a52';
+  };
+
+  /* 朗读今日 */
+  document.getElementById('btnSpkAll').onclick = function(){
+    var txt = '今天要做三件事。' +
+      (fresh.length ? '第一，学五个新词：' + fresh.map(function(x){return x.w;}).join('、') + '。' : '') +
+      '第二，默写一条名解：' + mj.q + '。第三，回看昨天学过的。';
+    if (fresh.length) txt += '先听一遍：' + fresh.map(function(x){ return x.w + '。' + x.say; }).join(' ');
+    T.speak(txt, this);
+  };
+
+  /* 分组进度 */
+  var gl = document.getElementById('grpList');
+  TERMS_DATA.groups.forEach(function(g){
+    var a = document.createElement('a');
+    a.className = 'entry';
+    a.href = 'terms.html#' + g.id;
+    a.innerHTML = '<div class="ico" style="font-size:13px">' + g.id.toUpperCase() + '</div>' +
+      '<div class="txt"><strong>' + T.esc(g.title) + '</strong>' +
+      '<span>' + T.esc(g.sub) + '</span>' +
+      '<div class="grp-prog"><i><b data-gprog="' + g.id + '"></b></i></div></div>' +
+      '<div class="arrow">›</div>';
+    gl.appendChild(a);
+  });
+  T.renderProgress();
+
+  document.getElementById('verLine').textContent = 'v1 · sw ' + (window.SW_VERSION || 'v1');
+})();
+
+/* Service Worker */
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
