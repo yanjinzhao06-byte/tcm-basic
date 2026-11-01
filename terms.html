@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#faf6ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="最小可懂集">
+<title>最小可懂集 · 100 词 · 中医基础</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <a class="tbtn" href="index.html">‹ 首页</a>
+    <h1 id="ttl">最小可懂集 · 100 词<small id="sub">先过这一关，再进正文</small></h1>
+    <button class="tbtn" id="btnOpenAll">全部展开</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="stat-row" style="margin-top:16px">
+    <div class="stat"><b><span data-prog="done">0</span></b><span>已掌握</span></div>
+    <div class="stat"><b data-prog="pct">0%</b><span>完成度</span></div>
+    <div class="stat"><b id="stLeft">0</b><span>还剩</span></div>
+  </div>
+  <div class="bar"><i data-prog="bar"></i></div>
+
+  <div class="note">
+    <b>怎么用：</b>点标题展开 → 先读「说人话」想通 → 再读「教材话」跟着念出声（点 🔊）→ 最后点「这个我懂了」。<br>
+    <b>「教材话」是考试要写的原话，别跳。</b>但先懂了再背，比硬背快十倍。
+  </div>
+
+  <div class="sw" style="margin:10px 0 0">
+    <input type="checkbox" id="hideDone"><label for="hideDone">隐藏已掌握的，只看新材料</label>
+  </div>
+
+  <div class="searchbox">
+    <input id="q" type="search" placeholder="搜词或搜内容，如：气化 / 脾 / 水肿" autocomplete="off">
+  </div>
+
+  <div id="body"></div>
+
+  <div class="foot">
+    🔥 必考 · ⭐ 常考 · ○ 了解 ｜ 大字优先背 🔥 的部分<br>
+    <span id="cntLine"></span>
+  </div>
+</div>
+
+<script src="data/data-terms.js"></script>
+<script src="app.js"></script>
+<script>
+(function(){
+  var T = window.TCM;
+  T.checkin();
+
+  var L = T.learned();
+  var hideDone = false;
+  var q = '';
+
+  function render(){
+    var body = document.getElementById('body');
+    body.innerHTML = '';
+    var shown = 0, total = 0;
+
+    TERMS_DATA.groups.forEach(function(g){
+      var gWrap = document.createElement('div');
+      gWrap.className = 'grp';
+      gWrap.id = g.id;
+
+      var hitTerms = g.terms.filter(function(t){
+        total++;
+        if (hideDone && L[t.w]) return false;
+        if (!q) return true;
+        var hay = (t.w + ' ' + t.say + ' ' + t.book + ' ' + t.use).toLowerCase();
+        return hay.indexOf(q) >= 0;
+      });
+      if (!hitTerms.length) return;
+
+      var h = document.createElement('h3');
+      var done = g.terms.filter(function(t){ return L[t.w]; }).length;
+      h.innerHTML = T.esc(g.title) + '<span class="cnt">' + done + '/' + g.terms.length + '</span>';
+      gWrap.appendChild(h);
+
+      var p = document.createElement('p');
+      p.textContent = g.sub;
+      gWrap.appendChild(p);
+
+      hitTerms.forEach(function(t){
+        shown++;
+        gWrap.appendChild(makeTerm(t));
+      });
+      body.appendChild(gWrap);
+    });
+
+    if (!shown){
+      body.innerHTML = '<div class="note" style="margin-top:20px">没有匹配的词，换个关键词试试。</div>';
+    }
+    document.getElementById('cntLine').textContent = '共 ' + TERMS_DATA.groups.reduce(function(a,g){return a+g.terms.length;},0) + ' 词 · 当前显示 ' + shown + ' 词';
+    refreshStats();
+  }
+
+  function makeTerm(t){
+    var d = document.createElement('div');
+    d.className = 'term';
+    if (L[t.w]) d.classList.add('done-term');
+
+    var hd = document.createElement('div');
+    hd.className = 'th';
+    hd.innerHTML =
+      '<span class="w">' + T.esc(t.w) + '</span>' +
+      '<span class="lv">' + T.lvMark(t.lv) + '</span>' +
+      '<button class="spk" title="朗读">🔊</button>' +
+      '<span class="cue">›</span>';
+    d.appendChild(hd);
+
+    var tb = document.createElement('div');
+    tb.className = 'tb';
+    tb.innerHTML =
+      '<div class="ln say"><span class="k">说人话</span><span class="v">' + T.esc(t.say) + '</span></div>' +
+      '<div class="ln book"><span class="k">教材话</span><span class="v">' + T.esc(t.book) + '</span></div>' +
+      '<div class="ln use"><span class="k">出现在</span><span class="v">' + T.esc(t.use) + '</span></div>' +
+      '<div class="done"></div>';
+    d.appendChild(tb);
+
+    var bt = document.createElement('button');
+    bt.className = 'bt-ok' + (L[t.w] ? ' on' : '');
+    bt.textContent = L[t.w] ? '✅ 已掌握（点一下取消）' : '这个我懂了';
+    bt.onclick = function(){
+      var now = !L[t.w];
+      T.markLearned(t.w, now);
+      L = T.learned();
+      bt.className = 'bt-ok' + (now ? ' on' : '');
+      bt.textContent = now ? '✅ 已掌握（点一下取消）' : '这个我懂了';
+      refreshStats();
+    };
+    tb.querySelector('.done').appendChild(bt);
+
+    hd.onclick = function(e){
+      if (e.target.classList.contains('spk')) return;
+      d.classList.toggle('open');
+    };
+    hd.querySelector('.spk').onclick = function(e){
+      e.stopPropagation();
+      T.speak(t.w + '。' + t.say + '。教材上说：' + t.book, this);
+    };
+    return d;
+  }
+
+  function refreshStats(){
+    var p = T.progress();
+    T.renderProgress();
+    document.getElementById('stLeft').textContent = Math.max(0, p.total - p.done);
+  }
+
+  /* 事件 */
+  document.getElementById('q').oninput = function(){
+    q = this.value.trim().toLowerCase();
+    render();
+  };
+  document.getElementById('hideDone').onchange = function(){
+    hideDone = this.checked;
+    render();
+  };
+  var allOpen = false;
+  document.getElementById('btnOpenAll').onclick = function(){
+    allOpen = !allOpen;
+    this.textContent = allOpen ? '全部收起' : '全部展开';
+    var ts = document.querySelectorAll('.term');
+    for (var i=0;i<ts.length;i++) ts[i].classList.toggle('open', allOpen);
+  };
+
+  render();
+
+  /* 从首页带锚点进来：自动展开那一组第一个 */
+  if (location.hash) {
+    var el = document.querySelector(location.hash);
+    if (el) setTimeout(function(){ el.scrollIntoView({behavior:'smooth',block:'start'}); }, 120);
+  }
+})();
+
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
