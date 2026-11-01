@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#faf6ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="学习路线">
+<title>16 周路线 + 三条禁令 · 中医基础</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <a class="tbtn" href="index.html">‹ 首页</a>
+    <h1>学习路线<small>0 基础 → 150 分 · 16 周</small></h1>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hd">
+    <h2>先记住这一句</h2>
+    <p><b>不要按教材从绪论第一页开始死读。</b>绪论多是"知道"级内容，而且没学过后面你根本理解不了"辨证论治"在说什么。绪论放最后。</p>
+  </div>
+
+  <div class="hd"><h2 style="font-size:18px">正确顺序</h2></div>
+  <div class="note" style="line-height:2.2;font-size:14.5px">
+    最小可懂集 100 词<br>
+    ↓
+    <b>哲学基础</b>（精气·阴阳·五行）＝ 学语言<br>
+    ↓
+    <b>藏象</b> ＝ 分值大头，慢就是快<br>
+    ↓
+    精气血津液神 → 经络 → 体质<br>
+    ↓
+    病因 → <b>病机</b> ＝ 第二大头<br>
+    ↓
+    养生防治康复 → 最后回头补绪论
+  </div>
+
+  <div class="hd"><h2 style="font-size:18px">为什么藏象要先学、要多花时间</h2></div>
+  <div class="note">
+    中医基础后面的每一个病机，主语都是脏腑：<b>「脾虚」生湿、「肝郁」乘脾、「肾不纳气」致喘</b>。
+    藏象没打通，后面的病因病机全是背字，背了就忘。<br><br>
+    反过来，藏象打通了，病机那一半是靠"推"出来的，不用背。<br><br>
+    <b>所以：藏象 3 周、病机 2 周，这两个占掉 5 周。绪论、体质加起来只给 1 周。</b>
+  </div>
+
+  <div class="hd"><h2 style="font-size:18px">16 周表（每天约 1 小时）</h2></div>
+  <div id="weeks"></div>
+
+  <div class="hd"><h2 style="font-size:18px">每天 25 分钟固定套路</h2></div>
+  <div class="note">
+    ① 回看昨天 / 随便翻 5 张已掌握 —— 3 分钟<br>
+    ② 学 5 个新词（说人话 → 教材话 → 念出声）—— 15 分钟<br>
+    ③ 默写 1 条名解（看→抄→默）—— 5 分钟<br>
+    ④ 打个卡 —— 2 分钟<br><br>
+    <b>周末只做两件事：默写 + 错题。不学新东西。</b>
+  </div>
+
+  <div class="hd"><h2 style="font-size:18px">三条禁令（贴脑门上）</h2></div>
+  <ol class="bad-list">
+    <li><b>不许刷题。</b>0 基础刷题就是在背答案，题干换个数你就错。先听懂，再刷。</li>
+    <li><b>不许平均用力。</b>藏象 + 病机要占一半以上时间，绪论和体质可以粗过。考纲没说"每章一样重要"。</li>
+    <li><b>不许"看懂了就算学会"。</b>唯一标准：遮住原文能不能默出来。看懂了不等于会写，会写不等于写全。</li>
+  </ol>
+
+  <div class="hd"><h2 style="font-size:18px">分值大概长什么样</h2></div>
+  <div class="note">
+    河南专升本 中医基础 <b>150 分</b>，范围只有《中医基础理论》这一门（不考中诊/中药/方剂）。<br><br>
+    按常见题型拆：<b>客观题约 90 分</b>（单选、多选、填空）＋ <b>主观默写题约 60 分</b>（名解、简答、论述）。<br><br>
+    · 客观题靠"辨析"：六淫各自特点、五脏各自功能、虚实寒热怎么分——<b>靠最小可懂集那 100 词</b><br>
+    · 主观题靠"逐字"：名解、简答要点——<b>靠默写台</b><br><br>
+    ⚠ 具体题量和分值各资料说法不完全一致（是否含案例分析题也有不同说法），<b>以河南省教育考试院当年大纲为准</b>。
+    但"客观题 90 / 主观题 60"这个结构是共通的。
+  </div>
+
+  <div class="foot">
+    路线可以按你自己的时间压缩或拉长，但<b>顺序不要换</b><br>
+    你现在缺的不是时间，是"从哪开始"——答案就是上面那 100 个词。
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  var T = window.TCM;
+  T.checkin();
+
+  var weeks = [
+    { w:'1–2', t:'最小可懂集 100 词 + 中医学思维方法', g:'看到术语不再发懵。这一周别急着背书，先让词认识你。', big:false },
+    { w:'3–5', t:'藏象（五脏 → 六腑 → 奇恒之腑 → 脏腑关系）', g:'分值大头。每个脏按"主什么 / 靠什么 / 表现在哪 / 坏了什么症状"四步走。', big:true },
+    { w:'6–7', t:'精、气、血、津液、神', g:'和藏象互相印证：气怎么生、血怎么走、津液靠谁运。', big:false },
+    { w:'8–9', t:'经络', g:'十二正经走向 + 奇经八脉 + 经络的生理作用。图比字好记。', big:false },
+    { w:'10', t:'体质（含附录 中医体质分类与判定）', g:'一周够，别多花。九种体质能对上号就行。', big:false },
+    { w:'11–12', t:'病因（六淫、七情、饮食劳逸、痰饮瘀血）', g:'六淫按"阴阳属性 / 特性 / 致病特点 / 常见症状"做成表背。', big:false },
+    { w:'13–14', t:'病机（邪正盛衰、阴阳失调、气血失常、内生五邪）', g:'第二大头。这一块是"推"出来的，藏象通了这里就轻松。', big:true },
+    { w:'15', t:'养生防治康复 + 治则', g:'正治反治、三因制宜、治未病——考法固定，最好拿分。', big:false },
+    { w:'16', t:'全真模拟 + 名解默写冲刺 + 回头补绪论', g:'只做默写和错题，不学新内容。', big:true }
+  ];
+
+  var box = document.getElementById('weeks');
+  weeks.forEach(function(x){
+    var d = document.createElement('div');
+    d.className = 'wk' + (x.big ? ' big' : '');
+    d.innerHTML = '<div class="r1"><span class="wkn">第 ' + x.w + ' 周</span>' +
+      '<strong>' + T.esc(x.t) + '</strong></div>' +
+      '<div class="goal">' + T.esc(x.g) + '</div>';
+    box.appendChild(d);
+  });
+})();
+
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
